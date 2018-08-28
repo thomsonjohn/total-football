@@ -1,14 +1,13 @@
 import React from "react";
 
+import Fixture from "../Fixture/Fixture";
+
+import "./FixtureList.css";
+
 const FixtureList = props => {
   const { matchday } = props;
   const fixtures = matchday.matches.map((match, index) => {
-    return (
-      <div key={index}>
-        <p>{match.homeTeam.name}</p>
-        <p>{match.awayTeam.name}</p>
-      </div>
-    );
+    return <Fixture match={match} index={index} />;
   });
   return <section className="fixture-list">{fixtures}</section>;
 };
