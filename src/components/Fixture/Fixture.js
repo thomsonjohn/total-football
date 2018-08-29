@@ -25,8 +25,17 @@ const Fixture = props => {
       <div className="fixture__score">
         <div className="fixture__goals">
           <p>
-            <span>{match.score.fullTime.homeTeam}</span>:
-            <span>{match.score.fullTime.awayTeam}</span>
+            <span>
+              {match.score.fullTime.homeTeam
+                ? match.score.fullTime.homeTeam
+                : 0}
+            </span>
+            :
+            <span>
+              {match.score.fullTime.awayTeam
+                ? match.score.fullTime.awayTeam
+                : 0}
+            </span>
           </p>
         </div>
       </div>
