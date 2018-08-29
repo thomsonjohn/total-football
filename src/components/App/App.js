@@ -20,7 +20,7 @@ class App extends Component {
   }
 
   componentWillMount() {
-    const result = fetch(`http://api.football-data.org/v2/competitions/2021`, {
+    const result = fetch(`https://api.football-data.org/v2/competitions/2021`, {
       method: "GET",
       headers: {
         "X-Auth-Token": API_KEY,
@@ -35,7 +35,7 @@ class App extends Component {
         console.log(currentMatchday);
 
         return fetch(
-          `http://api.football-data.org/v2/competitions/2021/matches?matchday=${currentMatchday}`,
+          `https://api.football-data.org/v2/competitions/2021/matches?matchday=${currentMatchday}`,
           {
             method: "GET",
             headers: {
