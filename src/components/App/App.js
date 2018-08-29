@@ -5,13 +5,15 @@ import Header from "../Header/Header";
 import FixtureList from "../FixtureList/FixtureList";
 
 import matchday from "../../data/matches";
+import teams from "../../data/teams";
 
 class App extends Component {
   constructor() {
     super();
 
     this.state = {
-      matchday
+      matchday,
+      teams
     };
   }
 
@@ -19,7 +21,7 @@ class App extends Component {
     return (
       <div className="app">
         <Header />
-        <FixtureList matchday={this.state.matchday} />
+        <FixtureList matchday={this.state.matchday} teams={this.state.teams} />
       </div>
     );
   }

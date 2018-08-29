@@ -5,9 +5,9 @@ import Fixture from "../Fixture/Fixture";
 import "./FixtureList.css";
 
 const FixtureList = props => {
-  const { matchday } = props;
+  const { matchday, teams } = props;
   const fixtures = matchday.matches.map((match, index) => {
-    return <Fixture match={match} index={index} />;
+    return <Fixture key={index} match={match} teams={teams} index={index} />;
   });
   return <section className="fixture-list">{fixtures}</section>;
 };

@@ -11,17 +11,18 @@
 }
 
 .fixture__team--home {
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.fixture__team--away {
   justify-content: flex-end;
   text-align: right;
 }
 
-.fixture__team--away {
-  justify-content: flex-start;
-}
-
 .fixture__team-name {
   display: flex;
-  font-size: 0.7em;
+  font-size: 0.8em;
   flex-wrap: nowrap;
 }
 
