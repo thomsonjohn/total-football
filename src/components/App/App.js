@@ -21,6 +21,7 @@ class App extends Component {
 
   componentWillMount() {
     const result = fetch(`https://api.football-data.org/v2/competitions/2021`, {
+      mode: "cors",
       headers: {
         "X-Auth-Token": API_KEY
       }
@@ -34,6 +35,7 @@ class App extends Component {
         return fetch(
           `https://api.football-data.org/v2/competitions/2021/matches?matchday=${currentMatchday}`,
           {
+            mode: "cors",
             headers: {
               "X-Auth-Token": API_KEY
             }
