@@ -7,6 +7,8 @@ import FixtureList from "../FixtureList/FixtureList";
 import matchday from "../../data/matches";
 import teams from "../../data/teams";
 
+import apiKey from "../../football-key";
+
 class App extends Component {
   constructor() {
     super();
@@ -18,6 +20,7 @@ class App extends Component {
   }
 
   render() {
+    console.log(apiKey);
     return (
       <div className="app">
         <Header />
