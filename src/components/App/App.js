@@ -3,6 +3,8 @@ import "./App.css";
 
 import Header from "../Header/Header";
 import FixtureList from "../FixtureList/FixtureList";
+import LoaderSpinner from "../LoadingSpinner/LoadingSpinner";
+import Error from "../Error/Error";
 
 import teams from "../../data/teams";
 
@@ -47,29 +49,44 @@ class App extends Component {
         );
       })
       .then(res => res.json())
-      .catch(err => console.log("Fucking request failed", err));
+      .catch(err => {
+        console.log("Fucking request failed", err);
+        this.setState({
+          error: true,
+          fetched: false,
+          loading: false
+        });
+      });
 
     result.then(r =>
       this.setState({
         matchday: r,
         loading: false,
-        fetched: true
+        fetched: true,
+        error: false
       })
     );
   }
 
   render() {
+    let content;
+
+    if (this.state.error) {
+      content = <Error />;
+    } else if (this.state.loading) {
+      content = <LoaderSpinner />;
+    } else if (!this.state.loading && !this.state.error && this.state.fetched) {
+      content = (
+        <FixtureList matchday={this.state.matchday} teams={this.state.teams} />
+      );
+    } else {
+      content = <p>Nothing to see here!</p>;
+    }
+
     return (
       <div className="app">
         <Header />
-        {this.state.loading ? (
-          <p>loading...</p>
-        ) : (
-          <FixtureList
-            matchday={this.state.matchday}
-            teams={this.state.teams}
-          />
-        )}
+        {content}
       </div>
     );
   }
