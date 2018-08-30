@@ -4,6 +4,24 @@
   margin: 5px 0;
 }
 
+.fixture-container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1em;
+}
+
+.fixture-date {
+  width: 80%;
+  margin: 0 auto;
+  text-align: center;
+  font-family: "Arial", sans-serif;
+  font-size: 0.7em;
+  background: #e6e6e6;
+  color: grey;
+  padding: 0.5em;
+  border-radius: 3px;
+}
+
 .fixture__team {
   display: flex;
   flex: 2;
