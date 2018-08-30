@@ -12,7 +12,6 @@ const Fixture = props => {
   const homeTeam = getTeamData(match.homeTeam);
   const awayTeam = getTeamData(match.awayTeam);
   const kickOff = moment(match.utcDate).calendar();
-  console.log(kickOff);
   return (
     <div className="fixture-container" key={index}>
       <div className="fixture">

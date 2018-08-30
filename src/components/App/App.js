@@ -49,6 +49,14 @@ class App extends Component {
         );
       })
       .then(res => res.json())
+      .then(result => {
+        this.setState({
+          matchday: result,
+          loading: false,
+          fetched: true,
+          error: false
+        });
+      })
       .catch(err => {
         console.log("Fucking request failed", err);
         this.setState({
@@ -57,15 +65,6 @@ class App extends Component {
           loading: false
         });
       });
-
-    result.then(r =>
-      this.setState({
-        matchday: r,
-        loading: false,
-        fetched: true,
-        error: false
-      })
-    );
   }
 
   render() {
