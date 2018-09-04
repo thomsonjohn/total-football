@@ -2,12 +2,14 @@ import React, { Component } from "react";
 import "./App.css";
 
 import Header from "../Header/Header";
-import FixtureList from "../FixtureList/FixtureList";
 import LoaderSpinner from "../LoadingSpinner/LoadingSpinner";
+import FixtureView from "../FixtureView/FixtureView";
+import ControlPanel from "../ControlPanel/ControlPanel";
 import Error from "../Error/Error";
 
 import teams from "../../data/teams";
 import { getMatches } from "../../utils/get-football-data";
+import { matchdayByMonth, monthsInLeague } from "../../utils/matchday-by-month";
 
 class App extends Component {
   constructor() {
@@ -17,8 +19,11 @@ class App extends Component {
       leagueCode: "2021",
       loading: true,
       fetched: false,
-      teams
+      teams,
+      selectedMatchday: "current"
     };
+
+    this.handleMatchesChange = this.handleMatchesChange.bind(this);
   }
 
   componentWillMount() {
@@ -34,7 +39,10 @@ class App extends Component {
         matches: result,
         loading: false,
         fetched: true,
-        matchday
+        matchday,
+        currentMatchday: result.matches[0].season.currentMatchday,
+        matchdays: matchdayByMonth(result),
+        monthsInLeague: monthsInLeague(result)
       });
     };
     const failure = result => {
@@ -46,6 +54,12 @@ class App extends Component {
     getMatches(this.state.leagueCode).then(success, failure);
   }
 
+  handleMatchesChange = event => {
+    this.setState({
+      selectedMatchday: event.target.value
+    });
+  };
+
   render() {
     let content;
 
@@ -55,7 +69,13 @@ class App extends Component {
       content = <LoaderSpinner />;
     } else if (!this.state.loading && !this.state.error && this.state.fetched) {
       content = (
-        <FixtureList matchday={this.state.matchday} teams={this.state.teams} />
+        <FixtureView
+          matchday={this.state.matchday}
+          matchdays={this.state.matchdays}
+          selectedMatchday={this.state.selectedMatchday}
+          teams={teams}
+          currentMatchday={this.state.currentMatchday}
+        />
       );
     } else {
       content = <p>Nothing to see here!</p>;
@@ -64,6 +84,12 @@ class App extends Component {
     return (
       <div className="app">
         <Header />
+        {this.state.monthsInLeague && (
+          <ControlPanel
+            matchOptions={this.state.monthsInLeague}
+            handleMatchesChange={this.handleMatchesChange}
+          />
+        )}
         {content}
       </div>
     );

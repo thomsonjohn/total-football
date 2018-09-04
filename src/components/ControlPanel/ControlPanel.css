@@ -1,0 +1,29 @@
+.control-panel {
+  display: flex;
+  background-color: #efefef;
+  padding: 1em 0;
+  box-shadow: inset 0 11px 30px -10px rgba(0, 0, 0, 0.22),
+    inset 0 -11px 30px -10px rgba(0, 0, 0, 0.22);
+}
+
+.control-panel__logo-container {
+  width: 150px;
+  height: 150px;
+}
+
+.control-panel__logo {
+  width: 100%;
+}
+
+.control-panel__form {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+}
+
+label {
+  font-family: "Roboto Mono", monospace;
+  color: #31ac22;
+  font-size: 0.8em;
+  margin: 0.8em 0;
+}

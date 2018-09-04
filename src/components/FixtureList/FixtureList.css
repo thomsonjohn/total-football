@@ -5,3 +5,10 @@
   max-width: 450px;
   margin: 0 auto;
 }
+
+.fixture-list-head {
+  text-align: center;
+  font-size: 1em;
+  font-family: "Roboto Mono", monospace;
+  color: #31ac22;
+}

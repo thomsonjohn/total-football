@@ -6,7 +6,7 @@ import Loader from "react-loader-spinner";
 const LoaderSpinner = () => {
   return (
     <div className="loading">
-      <Loader type="Oval" color="seagreen" height={80} width={80} />
+      <Loader type="Oval" color="#31ac22" height={80} width={80} />
       <p className="loading-text">Loading...</p>
     </div>
   );
