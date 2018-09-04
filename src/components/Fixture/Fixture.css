@@ -14,7 +14,7 @@
   width: 80%;
   margin: 0 auto;
   text-align: center;
-  font-family: "Arial", sans-serif;
+  font-family: "Roboto Mono", sans-serif;
   font-size: 0.7em;
   background: #e6e6e6;
   color: grey;
@@ -40,8 +40,9 @@
 
 .fixture__team-name {
   display: flex;
-  font-size: 0.8em;
+  font-size: 0.7em;
   flex-wrap: nowrap;
+  font-family: "Roboto Mono", monospace;
 }
 
 .fixture__badge {
@@ -60,6 +61,7 @@
   display: flex;
   flex: 1;
   justify-content: center;
+  font-family: "Roboto Mono", monospace;
 }
 
 .fixture__goals > p > span {
