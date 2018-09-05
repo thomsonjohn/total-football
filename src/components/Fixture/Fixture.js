@@ -17,7 +17,9 @@ const Fixture = props => {
     <div className="fixture-container" key={index}>
       <div className="fixture">
         <div className="fixture__team fixture__team--home">
-          <p className="fixture__team-name">{homeTeam.shortName}</p>
+          <p className="fixture__team-name">
+            {homeTeam.shortName ? homeTeam.shortName : homeTeam.name}
+          </p>
         </div>
         <div className="fixture__badge-container">
           <img
@@ -51,7 +53,9 @@ const Fixture = props => {
           />
         </div>
         <div className="fixture__team fixture__team--away">
-          <p className="fixture__team-name">{awayTeam.shortName}</p>
+          <p className="fixture__team-name">
+            {awayTeam.shortName ? awayTeam.shortName : awayTeam.name}
+          </p>
         </div>
       </div>
       <div className="fixture-date">{kickOff}</div>
