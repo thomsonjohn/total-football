@@ -1,0 +1,12 @@
+.footer {
+  font-size: 0.8em;
+  font-family: "Roboto Mono", monospace;
+  color: grey;
+  background-color: #e6e6e6;
+  padding: 3em 0;
+  text-align: center;
+}
+
+.footer > p {
+  margin: 0 auto;
+}

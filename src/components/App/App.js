@@ -5,11 +5,13 @@ import Header from "../Header/Header";
 import LoaderSpinner from "../LoadingSpinner/LoadingSpinner";
 import FixtureView from "../FixtureView/FixtureView";
 import ControlPanel from "../ControlPanel/ControlPanel";
+import LeagueTable from "../LeagueTable/LeagueTable";
+import Footer from "../Footer/Footer";
 import Error from "../Error/Error";
 
 import teams from "../../data/teams";
 import leagues from "../../data/leagues";
-import { getMatches } from "../../utils/get-football-data";
+import { getMatches, getLeagueStandings } from "../../utils/get-football-data";
 import { matchdayByMonth, monthsInLeague } from "../../utils/matchday-by-month";
 
 class App extends Component {
@@ -49,6 +51,11 @@ class App extends Component {
         monthsInLeague: monthsInLeague(result)
       });
     };
+    const updateLeague = leagueTable => {
+      this.setState({
+        leagueTable
+      });
+    };
     const failure = result => {
       this.setState({
         loading: false,
@@ -56,6 +63,7 @@ class App extends Component {
       });
     };
     getMatches(code).then(success, failure);
+    getLeagueStandings(code).then(updateLeague, failure);
   };
 
   componentWillMount() {
@@ -102,16 +110,24 @@ class App extends Component {
     return (
       <div className="app">
         <Header />
-        {this.state.monthsInLeague && (
-          <ControlPanel
-            leagueOptions={this.state.leagues}
-            matchOptions={this.state.monthsInLeague}
-            handleMatchesChange={this.handleMatchesChange}
-            handleLeagueChange={this.handleLeagueChange}
-            leagueCode={this.state.leagueCode}
-          />
-        )}
-        {content}
+        <main className="main-content">
+          <section className="left-content">
+            {this.state.monthsInLeague && (
+              <ControlPanel
+                leagueOptions={this.state.leagues}
+                matchOptions={this.state.monthsInLeague}
+                handleMatchesChange={this.handleMatchesChange}
+                handleLeagueChange={this.handleLeagueChange}
+                leagueCode={this.state.leagueCode}
+              />
+            )}
+            {this.state.leagueTable && (
+              <LeagueTable leagueTable={this.state.leagueTable} />
+            )}
+          </section>
+          <section className="right-content">{content}</section>
+        </main>
+        <Footer />
       </div>
     );
   }

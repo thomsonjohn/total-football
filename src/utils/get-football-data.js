@@ -16,3 +16,20 @@ export const getMatches = code => {
     .catch(err => console.log("Failed to get matches, son", err));
   return result;
 };
+
+export const getLeagueStandings = code => {
+  const result = fetch(
+    `https://api.football-data.org/v2/competitions/${code}/standings`,
+    {
+      method: "GET",
+      headers: {
+        "X-Auth-Token": API_KEY,
+        "Content-Type": "text/plain"
+      },
+      cache: "default"
+    }
+  )
+    .then(res => res.json())
+    .catch(err => console.log("Failed to get league standings, bro", err));
+  return result;
+};

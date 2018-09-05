@@ -1,0 +1,59 @@
+.league-pos {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.75em;
+  font-family: "Roboto Mono", monospace;
+  border-bottom: 1px solid #efefef;
+  color: grey;
+}
+
+.league-pos-head {
+  background-color: #e6e6e6;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+}
+
+.league-pos__team {
+  flex: 5;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+}
+
+.league-pos__team-title {
+  padding-left: 1em;
+}
+
+.league-pos__rank {
+  padding: 0 0.7em;
+  justify-content: center;
+  width: 20px;
+  text-align: center;
+}
+
+.league-pos__badge {
+  padding-right: 0.7em;
+}
+
+.league-table-badge-img {
+  width: 20px;
+  height: 20px;
+}
+
+.league-pos__name {
+  justify-content: center;
+}
+
+.league-pos__stat,
+.league-pos__pts {
+  flex: 1;
+  justify-content: center;
+  text-align: center;
+}
+
+.league-pos__pts {
+  color: #31ac22;
+  font-weight: 700;
+}

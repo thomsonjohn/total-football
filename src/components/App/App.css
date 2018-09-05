@@ -36,3 +36,21 @@ ul {
     transform: rotate(360deg);
   }
 }
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.left-content,
+.right-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+@media (min-width: 800px) {
+  .main-content {
+    flex-direction: row;
+  }
+}

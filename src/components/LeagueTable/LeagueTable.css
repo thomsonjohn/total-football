@@ -1,0 +1,26 @@
+.league-table {
+  flex: 2;
+  display: none;
+}
+
+.league-table-main {
+  padding: 0 1em;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.league-table-head {
+  text-align: center;
+  font-size: 1em;
+  font-family: "Roboto Mono", monospace;
+  color: #31ac22;
+  margin: 2em 0;
+}
+
+@media (min-width: 800px) {
+  .league-table {
+    display: flex;
+    flex-direction: column;
+  }
+}

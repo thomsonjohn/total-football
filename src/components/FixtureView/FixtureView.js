@@ -1,5 +1,6 @@
 import React from "react";
 
+import "./FixtureView.css";
 import FixtureList from "../FixtureList/FixtureList";
 
 const FixtureView = props => {
