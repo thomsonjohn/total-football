@@ -23,6 +23,11 @@ const leagues = [
     name: "Ligue 1",
     country: "FRA",
     code: 2015
+  },
+  {
+    name: "Champions League",
+    country: "EUR",
+    code: 2001
   }
 ];
 

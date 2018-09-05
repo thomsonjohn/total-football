@@ -7,6 +7,7 @@ import bundesliga from "../../assets/img/bundesliga.png";
 import calcioA from "../../assets/img/calcio-a.png";
 import ligue1 from "../../assets/img/ligue-1.png";
 import laLiga from "../../assets/img/la-liga.png";
+import ucl from "../../assets/img/ucl.png";
 
 const ControlPanel = props => {
   const {
@@ -29,6 +30,8 @@ const ControlPanel = props => {
     leagueLogo = laLiga;
   } else if (leagueCode == 2015) {
     leagueLogo = ligue1;
+  } else if (leagueCode == 2001) {
+    leagueLogo = ucl;
   } else {
     leagueLogo = eplLogo;
   }
