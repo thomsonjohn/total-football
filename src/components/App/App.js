@@ -8,6 +8,7 @@ import ControlPanel from "../ControlPanel/ControlPanel";
 import Error from "../Error/Error";
 
 import teams from "../../data/teams";
+import leagues from "../../data/leagues";
 import { getMatches } from "../../utils/get-football-data";
 import { matchdayByMonth, monthsInLeague } from "../../utils/matchday-by-month";
 
@@ -16,17 +17,20 @@ class App extends Component {
     super();
 
     this.state = {
-      leagueCode: "2021",
+      leagueCode: 2021,
       loading: true,
       fetched: false,
+      leagues,
       teams,
       selectedMatchday: "current"
     };
 
     this.handleMatchesChange = this.handleMatchesChange.bind(this);
+    this.handleLeagueChange = this.handleLeagueChange.bind(this);
+    this.fetchMatchDataForLeague = this.fetchMatchDataForLeague.bind(this);
   }
 
-  componentWillMount() {
+  fetchMatchDataForLeague = code => {
     const success = result => {
       const matchday = [];
       result.matches.map(match => {
@@ -51,13 +55,26 @@ class App extends Component {
         error: true
       });
     };
-    getMatches(this.state.leagueCode).then(success, failure);
+    getMatches(code).then(success, failure);
+  };
+
+  componentWillMount() {
+    this.fetchMatchDataForLeague(this.state.leagueCode);
   }
 
   handleMatchesChange = event => {
     this.setState({
       selectedMatchday: event.target.value
     });
+  };
+
+  handleLeagueChange = event => {
+    this.setState({
+      loading: true,
+      fetched: false,
+      leagueCode: event.target.value
+    });
+    this.fetchMatchDataForLeague(event.target.value);
   };
 
   render() {
@@ -75,6 +92,7 @@ class App extends Component {
           selectedMatchday={this.state.selectedMatchday}
           teams={teams}
           currentMatchday={this.state.currentMatchday}
+          leagueCode={this.state.leagueCode}
         />
       );
     } else {
@@ -86,8 +104,11 @@ class App extends Component {
         <Header />
         {this.state.monthsInLeague && (
           <ControlPanel
+            leagueOptions={this.state.leagues}
             matchOptions={this.state.monthsInLeague}
             handleMatchesChange={this.handleMatchesChange}
+            handleLeagueChange={this.handleLeagueChange}
+            leagueCode={this.state.leagueCode}
           />
         )}
         {content}

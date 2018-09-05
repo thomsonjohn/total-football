@@ -1,10 +1,12 @@
 import moment from "moment";
 
-const arrayOfMatchdays = [];
-const matchdays = [];
-const months = [];
+let arrayOfMatchdays = [];
+let matchdays = [];
+let months = [];
 
 export const matchdayByMonth = data => {
+  matchdays = [];
+  arrayOfMatchdays = [];
   data.matches.map(match => {
     var foundMatchday = arrayOfMatchdays.some(el => {
       return el === match.matchday;
@@ -28,6 +30,7 @@ export const matchdayByMonth = data => {
 };
 
 export const monthsInLeague = data => {
+  months = [];
   data.matches.map(match => {
     const month = moment(match.utcDate).format("MMMM");
     var foundMonth = months.some(el => {

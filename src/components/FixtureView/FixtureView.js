@@ -8,7 +8,8 @@ const FixtureView = props => {
     matchdays,
     selectedMatchday,
     teams,
-    currentMatchday
+    currentMatchday,
+    leagueCode
   } = props;
   let content;
 
@@ -18,6 +19,7 @@ const FixtureView = props => {
         matchdayId={currentMatchday}
         matchday={matchday}
         teams={teams}
+        leagueCode={leagueCode}
       />
     );
   } else {
@@ -29,6 +31,7 @@ const FixtureView = props => {
             matchday={day.matches}
             matchdayId={day.matchday}
             teams={teams}
+            leagueCode={leagueCode}
           />
         );
       }

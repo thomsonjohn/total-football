@@ -5,15 +5,25 @@ import Fixture from "../Fixture/Fixture";
 import "./FixtureList.css";
 
 const FixtureList = props => {
-  const { matchday, teams, matchdayId } = props;
+  const { matchday, teams, matchdayId, leagueCode } = props;
   const fixtures = matchday.map((match, index) => {
-    return <Fixture key={index} match={match} teams={teams} index={index} />;
+    return (
+      <Fixture
+        key={index}
+        match={match}
+        teams={teams}
+        index={index}
+        leagueCode={leagueCode}
+      />
+    );
   });
   return (
-    <section className="fixture-list">
-      <h2 className="fixture-list-head">Matchday {matchdayId}</h2>
-      {fixtures}
-    </section>
+    matchday && (
+      <section className="fixture-list">
+        <h2 className="fixture-list-head">Matchday {matchdayId}</h2>
+        {fixtures}
+      </section>
+    )
   );
 };
 

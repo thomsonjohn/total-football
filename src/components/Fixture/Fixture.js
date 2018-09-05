@@ -5,13 +5,14 @@ import "./Fixture.css";
 
 import defaultBadge from "../../assets/img/shield.png";
 
-import getTeamData from "../../utils/get-team-data";
+import { getTeamData } from "../../utils/get-team-data";
 
 const Fixture = props => {
-  const { match, index } = props;
-  const homeTeam = getTeamData(match.homeTeam);
-  const awayTeam = getTeamData(match.awayTeam);
+  const { match, index, leagueCode } = props;
+  const homeTeam = getTeamData(match.homeTeam, leagueCode);
+  const awayTeam = getTeamData(match.awayTeam, leagueCode);
   const kickOff = moment(match.utcDate).calendar();
+
   return (
     <div className="fixture-container" key={index}>
       <div className="fixture">
