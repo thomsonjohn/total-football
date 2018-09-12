@@ -4,7 +4,9 @@ import {
   FETCH_MATCHES_BEGIN,
   FETCH_MATCHES_SUCCESS,
   FETCH_MATCHES_FAILURE,
-  SORT_MATCHES_INTO_GAMEWEEKS
+  SORT_MATCHES_INTO_GAMEWEEKS,
+  GET_MONTHS_IN_LEAGUE,
+  CHANGE_MONTH
 } from "../actions/actionTypes";
 
 export default function matchReducer(state = initialState, action) {
@@ -36,7 +38,19 @@ export default function matchReducer(state = initialState, action) {
     case SORT_MATCHES_INTO_GAMEWEEKS:
       return {
         ...state,
-        matchdays: action.payload
+        matchdays: action.payload.data
+      };
+
+    case GET_MONTHS_IN_LEAGUE:
+      return {
+        ...state,
+        monthsInLeague: action.payload.data
+      };
+
+    case CHANGE_MONTH:
+      return {
+        ...state,
+        selectedMatchday: action.payload.month
       };
 
     default:

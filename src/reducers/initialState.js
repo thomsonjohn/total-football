@@ -10,5 +10,6 @@ export default {
   error: false,
   teams,
   leagues,
-  leagueCode: 2021
+  leagueCode: 2021,
+  selectedMatchday: "current"
 };
