@@ -1,18 +1,47 @@
-import * as types from "./actionTypes";
-import moment from "moment";
+import fetch from "cross-fetch";
 
 const API_KEY = process.env.REACT_APP_FOOTBALL_API_KEY;
 
-const url = "https://api.football-data.org/v2/competitions/2021/matches";
-let arrayOfMatchdays = [];
-let matchdays = [];
-let months = [];
+export const REQUEST_MATCHES = "REQUEST_MATCHES";
+export const RECEIVE_MATCHES = "RECEIVE_MATCHES";
+export const SELECT_LEAGUE = "SELECT_LEAGUE";
+export const INVALIDATE_LEAGUE = "INVALIDATE_LEAGUE";
 
-export function fetchMatches(code, selectedMonth) {
+export function selectLeague(leagueCode) {
+  return {
+    type: SELECT_LEAGUE,
+    leagueCode
+  };
+}
+
+export function invalidateLeague(leagueCode) {
+  return {
+    type: INVALIDATE_LEAGUE,
+    leagueCode
+  };
+}
+
+function requestMatches(leagueCode) {
+  return {
+    type: REQUEST_MATCHES,
+    leagueCode
+  };
+}
+
+function receiveMatches(leagueCode, json) {
+  return {
+    type: RECEIVE_MATCHES,
+    leagueCode,
+    matches: json,
+    receivedAt: Date.now()
+  };
+}
+
+function fetchMatches(leagueCode) {
   return dispatch => {
-    dispatch(types.fetchMatchesBegin());
+    dispatch(requestMatches(leagueCode));
     return fetch(
-      `https://api.football-data.org/v2/competitions/${code}/matches`,
+      `https://api.football-data.org/v2/competitions/${leagueCode}/matches`,
       {
         method: "GET",
         headers: {
@@ -22,68 +51,26 @@ export function fetchMatches(code, selectedMonth) {
         cache: "default"
       }
     )
-      .then(handleErrors)
-      .then(res => res.json())
-      .then(json => {
-        dispatch(types.fetchMatchesSuccess(json));
-        dispatch(types.sortMatchesIntoGameweeks(sortData(json)));
-        dispatch(types.getMonthsInLeague(getMonthsInLeague(json)));
-        return json.matches;
-      })
-      .catch(error => dispatch(types.fetchMatchesFailure(error)));
+      .then(response => response.json())
+      .then(json => dispatch(receiveMatches(leagueCode, json)));
   };
 }
 
-export function changeMonth(month) {
-  return dispatch => {
-    dispatch(types.changeMonth(month));
-  };
-}
-
-function handleErrors(response) {
-  if (!response.ok) {
-    throw Error(response.statusText);
+function shouldFetchLeagues(state, leagueCode) {
+  const matches = state.matchesByLeague[leagueCode];
+  if (!matches) {
+    return true;
+  } else if (matches.isFetching) {
+    return false;
+  } else {
+    return matches.didInvalidate;
   }
-  return response;
 }
 
-function sortData(data) {
-  matchdays = [];
-  arrayOfMatchdays = [];
-  data.matches.map(match => {
-    var foundMatchday = arrayOfMatchdays.some(el => {
-      return el === match.matchday;
-    });
-    if (!foundMatchday) {
-      arrayOfMatchdays.push(match.matchday);
-      matchdays.push({
-        matchday: match.matchday,
-        month: moment(match.utcDate).format("MMMM"),
-        matches: [match]
-      });
-    } else {
-      matchdays.map(day => {
-        if (day.matchday === match.matchday) {
-          day.matches.push(match);
-        }
-        return matchdays;
-      });
+export function fetchMatchesIfNeeded(leagueCode) {
+  return (dispatch, getState) => {
+    if (shouldFetchLeagues(getState(), leagueCode)) {
+      return dispatch(fetchMatches(leagueCode));
     }
-    return matchdays;
-  });
-  return matchdays;
-}
-
-function getMonthsInLeague(data) {
-  months = [];
-  data.matches.map(match => {
-    const month = moment(match.utcDate).format("MMMM");
-    var foundMonth = months.some(el => {
-      return el === month;
-    });
-    if (!foundMonth) {
-      months.push(month);
-    }
-  });
-  return months;
+  };
 }

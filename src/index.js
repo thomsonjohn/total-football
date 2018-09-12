@@ -1,17 +1,7 @@
+import "babel-polyfill";
+
 import React from "react";
 import { render } from "react-dom";
-import { Provider } from "react-redux";
-import "./index.css";
-import App from "./components/App/App";
-import registerServiceWorker from "./registerServiceWorker";
-import configureStore from "./store/configureStore";
+import Root from "./containers/Root";
 
-const store = configureStore();
-
-render(
-  <Provider store={store}>
-    <App />
-  </Provider>,
-  document.getElementById("root")
-);
-registerServiceWorker();
+render(<Root />, document.getElementById("root"));

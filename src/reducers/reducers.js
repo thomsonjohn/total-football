@@ -1,59 +1,67 @@
-import initialState from "./initialState";
-
+import { combineReducers } from "redux";
 import {
-  FETCH_MATCHES_BEGIN,
-  FETCH_MATCHES_SUCCESS,
-  FETCH_MATCHES_FAILURE,
-  SORT_MATCHES_INTO_GAMEWEEKS,
-  GET_MONTHS_IN_LEAGUE,
-  CHANGE_MONTH
-} from "../actions/actionTypes";
+  SELECT_LEAGUE,
+  INVALIDATE_LEAGUE,
+  REQUEST_MATCHES,
+  RECEIVE_MATCHES
+} from "../actions/actions";
 
-export default function matchReducer(state = initialState, action) {
+function selectedLeague(state = "2021", action) {
   switch (action.type) {
-    case FETCH_MATCHES_BEGIN:
-      return {
-        ...state,
-        loading: true,
-        error: null
-      };
-
-    case FETCH_MATCHES_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        matches: action.payload.matches,
-        currentMatchday:
-          action.payload.matches.matches[0].season.currentMatchday
-      };
-
-    case FETCH_MATCHES_FAILURE:
-      return {
-        ...state,
-        loading: false,
-        error: action.payload.error,
-        matches: {}
-      };
-
-    case SORT_MATCHES_INTO_GAMEWEEKS:
-      return {
-        ...state,
-        matchdays: action.payload.data
-      };
-
-    case GET_MONTHS_IN_LEAGUE:
-      return {
-        ...state,
-        monthsInLeague: action.payload.data
-      };
-
-    case CHANGE_MONTH:
-      return {
-        ...state,
-        selectedMatchday: action.payload.month
-      };
-
+    case SELECT_LEAGUE:
+      console.log(action);
+      return action.leagueCode;
     default:
       return state;
   }
 }
+
+function matches(
+  state = {
+    isFetching: false,
+    didInvalidate: false,
+    items: []
+  },
+  action
+) {
+  switch (action.type) {
+    case INVALIDATE_LEAGUE:
+      return Object.assign({}, state, {
+        didInvalidate: true
+      });
+    case REQUEST_MATCHES:
+      return Object.assign({}, state, {
+        isFetching: true,
+        didInvalidate: false
+      });
+    case RECEIVE_MATCHES:
+      return Object.assign({}, state, {
+        isFetching: false,
+        didInvalidate: false,
+        items: action.matches,
+        lastUpdated: action.receivedAt
+      });
+    default:
+      return state;
+  }
+}
+
+function matchesByLeague(state = {}, action) {
+  switch (action.type) {
+    case INVALIDATE_LEAGUE:
+    case RECEIVE_MATCHES:
+    case REQUEST_MATCHES:
+      return Object.assign({}, state, {
+        [action.leagueCode]: matches(state[action.leagueCode], action)
+      });
+    default:
+      return state;
+  }
+}
+
+const rootReducer = combineReducers({
+  matchesByLeague,
+  selectedLeague
+});
+
+export default rootReducer;
