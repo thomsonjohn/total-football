@@ -37,7 +37,7 @@ export const monthsInLeague = data => {
       return el === month;
     });
     if (!foundMonth) {
-      months.push(month);
+      months.push({ [month]: {} });
     }
   });
   return months;

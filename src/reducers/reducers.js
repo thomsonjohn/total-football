@@ -20,7 +20,8 @@ function matches(
   state = {
     isFetching: false,
     didInvalidate: false,
-    items: []
+    leagueData: {},
+    matchdaysToShow: []
   },
   action
 ) {
@@ -38,8 +39,12 @@ function matches(
       return Object.assign({}, state, {
         isFetching: false,
         didInvalidate: false,
-        items: action.matches,
-        lastUpdated: action.receivedAt
+        leagueData: action.leagueData,
+        lastUpdated: action.receivedAt,
+        matchesByMonth: action.matchesByMonth,
+        currentMatchday: action.leagueData.matches[0].season.currentMatchday,
+        monthsInLeague: action.monthsInLeague,
+        matchdaysToShow: action.matchdaysToShow
       });
     default:
       return state;

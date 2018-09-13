@@ -6,8 +6,13 @@ import {
   fetchMatchesIfNeeded,
   invalidateLeague
 } from "../actions/actions";
+import Header from "../components/Header/Header";
+import FixtureView from "../components/FixtureView/FixtureView";
 import Picker from "../components/Picker";
-import Matches from "../components/Matches";
+import LoadingSpinner from "../components/LoadingSpinner/LoadingSpinner";
+import Footer from "../components/Footer/Footer";
+
+import "../components/App/App.css";
 
 class AsyncApp extends Component {
   constructor(props) {
@@ -42,9 +47,16 @@ class AsyncApp extends Component {
   }
 
   render() {
-    const { selectedLeague, matches, isFetching, lastUpdated } = this.props;
+    const {
+      selectedLeague,
+      leagueData,
+      isFetching,
+      lastUpdated,
+      matchdaysToShow
+    } = this.props;
     return (
       <div>
+        <Header />
         <Picker
           value={selectedLeague}
           onChange={this.handleChange}
@@ -60,13 +72,17 @@ class AsyncApp extends Component {
             <button onClick={this.handleRefreshClick}>Refresh</button>
           )}
         </p>
-        {isFetching && matches.length === 0 && <h2>Loading...</h2>}
-        {!isFetching && matches.length === 0 && <h2>Empty.</h2>}
-        {matches.length > 0 && (
+        {isFetching && !leagueData.matches && <LoadingSpinner />}
+        {!isFetching && !leagueData.matches && <h2>Empty.</h2>}
+        {matchdaysToShow && (
           <div style={{ opacity: isFetching ? 0.5 : 1 }}>
-            <Matches matches={matches} />
+            <FixtureView
+              matchdaysToShow={matchdaysToShow}
+              selectedLeague={selectedLeague}
+            />
           </div>
         )}
+        <Footer />
       </div>
     );
   }
@@ -74,26 +90,32 @@ class AsyncApp extends Component {
 
 AsyncApp.propTypes = {
   selectedLeague: PropTypes.string.isRequired,
-  matches: PropTypes.array.isRequired,
+  leagueData: PropTypes.object.isRequired,
   isFetching: PropTypes.bool.isRequired,
   lastUpdated: PropTypes.number,
-  dispatch: PropTypes.func.isRequired
+  dispatch: PropTypes.func.isRequired,
+  matchdaysToShow: PropTypes.array.isRequired
 };
 
 function mapStateToProps(state) {
   const { selectedLeague, matchesByLeague } = state;
-  const { isFetching, lastUpdated, items: matches } = matchesByLeague[
-    selectedLeague
-  ] || {
+  const {
+    isFetching,
+    lastUpdated,
+    leagueData,
+    matchdaysToShow
+  } = matchesByLeague[selectedLeague] || {
     isFetching: true,
-    items: []
+    leagueData: {},
+    matchdaysToShow: []
   };
 
   return {
     selectedLeague,
-    matches,
+    leagueData,
     isFetching,
-    lastUpdated
+    lastUpdated,
+    matchdaysToShow
   };
 }
 

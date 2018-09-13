@@ -5,7 +5,7 @@ export default class Matches extends Component {
   render() {
     return (
       <ul>
-        {this.props.matches.map((match, i) => (
+        {this.props.leagueData.matches.map((match, i) => (
           <li key={i}>{i}</li>
         ))}
       </ul>
@@ -14,5 +14,5 @@ export default class Matches extends Component {
 }
 
 Matches.propTypes = {
-  matches: PropTypes.array.isRequired
+  leagueData: PropTypes.object.isRequired
 };
