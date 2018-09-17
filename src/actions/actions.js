@@ -12,12 +12,20 @@ const API_KEY = process.env.REACT_APP_FOOTBALL_API_KEY;
 export const REQUEST_MATCHES = "REQUEST_MATCHES";
 export const RECEIVE_MATCHES = "RECEIVE_MATCHES";
 export const SELECT_LEAGUE = "SELECT_LEAGUE";
+export const SELECT_MONTH = "SELECT_MONTH";
 export const INVALIDATE_LEAGUE = "INVALIDATE_LEAGUE";
 
 export function selectLeague(leagueCode) {
   return {
     type: SELECT_LEAGUE,
     leagueCode
+  };
+}
+
+export function selectMonth(month) {
+  return {
+    type: SELECT_MONTH,
+    month
   };
 }
 
@@ -53,7 +61,7 @@ function receiveMatches(
   };
 }
 
-function fetchMatches(leagueCode) {
+function fetchMatches(leagueCode, selectedMonth) {
   return dispatch => {
     dispatch(requestMatches(leagueCode));
     return fetch(
@@ -71,6 +79,7 @@ function fetchMatches(leagueCode) {
       .then(json => {
         const monthsInLeague = getMonthsInLeague(json);
         const matchesByMonth = sortMatchesByMonth(json);
+        debugger;
         const getMatchdaysToShowFunc = getMatchdaysToShow(json, "current");
         dispatch(
           receiveMatches(
@@ -175,10 +184,10 @@ function shouldFetchLeagues(state, leagueCode) {
   }
 }
 
-export function fetchMatchesIfNeeded(leagueCode) {
+export function fetchMatchesIfNeeded(leagueCode, selectedMonth) {
   return (dispatch, getState) => {
     if (shouldFetchLeagues(getState(), leagueCode)) {
-      return dispatch(fetchMatches(leagueCode));
+      return dispatch(fetchMatches(leagueCode, selectedMonth));
     }
   };
 }

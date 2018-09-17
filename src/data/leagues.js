@@ -2,32 +2,32 @@ const leagues = [
   {
     name: "Premier League",
     country: "ENG",
-    code: 2021
+    code: "2021"
   },
   {
     name: "Bundesliga",
     country: "GER",
-    code: 2002
+    code: "2002"
   },
   {
     name: "Calcio A",
     country: "ITA",
-    code: 2019
+    code: "2019"
   },
   {
     name: "La Liga",
     country: "SPA",
-    code: 2014
+    code: "2014"
   },
   {
     name: "Ligue 1",
     country: "FRA",
-    code: 2015
+    code: "2015"
   },
   {
     name: "Champions League",
     country: "EUR",
-    code: 2001
+    code: "2001"
   }
 ];
 

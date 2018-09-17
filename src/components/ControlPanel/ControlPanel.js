@@ -1,8 +1,5 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import * as actions from "../../actions/actions";
-import PropTypes from "prop-types";
+// import PropTypes from 'prop-types'
 
 import "./ControlPanel.css";
 
@@ -13,27 +10,24 @@ import ligue1 from "../../assets/img/ligue-1.png";
 import laLiga from "../../assets/img/la-liga.png";
 import ucl from "../../assets/img/ucl.png";
 
-class ControlPanel extends Component {
-  handleMonthChange(event) {
-    this.props.actions.changeMonth(event.target.value);
-  }
+import leagues from "../../data/leagues";
 
+export default class ControlPanel extends Component {
   render() {
-    const { leagueCode, leagues, monthsInLeague } = this.props.matches;
-
+    const { selectedLeague, onLeagueChange } = this.props;
     let leagueLogo;
 
-    if (leagueCode == 2021) {
+    if (selectedLeague === "2021") {
       leagueLogo = eplLogo;
-    } else if (leagueCode == 2002) {
+    } else if (selectedLeague === "2002") {
       leagueLogo = bundesliga;
-    } else if (leagueCode == 2019) {
+    } else if (selectedLeague === "2019") {
       leagueLogo = calcioA;
-    } else if (leagueCode == 2014) {
+    } else if (selectedLeague === "2014") {
       leagueLogo = laLiga;
-    } else if (leagueCode == 2015) {
+    } else if (selectedLeague === "2015") {
       leagueLogo = ligue1;
-    } else if (leagueCode == 2001) {
+    } else if (selectedLeague === "2001") {
       leagueLogo = ucl;
     } else {
       leagueLogo = eplLogo;
@@ -50,7 +44,7 @@ class ControlPanel extends Component {
         </div>
         <form className="control-panel__form">
           <label>League:</label>
-          <select>
+          <select onChange={e => onLeagueChange(e.target.value)}>
             {leagues &&
               leagues.map((league, index) => {
                 return (
@@ -60,7 +54,7 @@ class ControlPanel extends Component {
                 );
               })}
           </select>
-          <label>Matches:</label>
+          {/* <label>Matches:</label>
           <select onChange={event => this.handleMonthChange(event)}>
             <option value="current">Current</option>
             {monthsInLeague &&
@@ -71,31 +65,9 @@ class ControlPanel extends Component {
                   </option>
                 );
               })}
-          </select>
+          </select> */}
         </form>
       </section>
     );
   }
 }
-
-ControlPanel.propTypes = {
-  actions: PropTypes.object,
-  matches: PropTypes.object
-};
-
-function mapStateToProps(state) {
-  return {
-    matches: state.data
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    actions: bindActionCreators(actions, dispatch)
-  };
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ControlPanel);

@@ -21,7 +21,8 @@ function matches(
     isFetching: false,
     didInvalidate: false,
     leagueData: {},
-    matchdaysToShow: []
+    matchdaysToShow: [],
+    selectedLeague: ""
   },
   action
 ) {
@@ -44,7 +45,8 @@ function matches(
         matchesByMonth: action.matchesByMonth,
         currentMatchday: action.leagueData.matches[0].season.currentMatchday,
         monthsInLeague: action.monthsInLeague,
-        matchdaysToShow: action.matchdaysToShow
+        matchdaysToShow: action.matchdaysToShow,
+        selectedLeague: action.leagueData.competition.id
       });
     default:
       return state;

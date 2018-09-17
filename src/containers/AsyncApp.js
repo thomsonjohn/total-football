@@ -1,14 +1,15 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import moment from "moment";
 import {
   selectLeague,
   fetchMatchesIfNeeded,
   invalidateLeague
 } from "../actions/actions";
 import Header from "../components/Header/Header";
+import ControlPanel from "../components/ControlPanel/ControlPanel";
 import FixtureView from "../components/FixtureView/FixtureView";
-import Picker from "../components/Picker";
 import LoadingSpinner from "../components/LoadingSpinner/LoadingSpinner";
 import Footer from "../components/Footer/Footer";
 
@@ -17,7 +18,7 @@ import "../components/App/App.css";
 class AsyncApp extends Component {
   constructor(props) {
     super(props);
-    this.handleChange = this.handleChange.bind(this);
+    this.handleLeagueChange = this.handleLeagueChange.bind(this);
     this.handleRefreshClick = this.handleRefreshClick.bind(this);
   }
 
@@ -33,7 +34,7 @@ class AsyncApp extends Component {
     }
   }
 
-  handleChange(nextLeague) {
+  handleLeagueChange(nextLeague) {
     this.props.dispatch(selectLeague(nextLeague));
     this.props.dispatch(fetchMatchesIfNeeded(nextLeague));
   }
@@ -57,16 +58,13 @@ class AsyncApp extends Component {
     return (
       <div>
         <Header />
-        <Picker
-          value={selectedLeague}
-          onChange={this.handleChange}
-          options={["2021", "2014", "2015"]}
+        <ControlPanel
+          selectedLeague={selectedLeague}
+          onLeagueChange={this.handleLeagueChange}
         />
         <p>
           {lastUpdated && (
-            <span>
-              Last updated at {new Date(lastUpdated).toLocaleTimeString()}.
-            </span>
+            <span>Last updated at {moment(lastUpdated).fromNow()}.</span>
           )}
           {!isFetching && (
             <button onClick={this.handleRefreshClick}>Refresh</button>
