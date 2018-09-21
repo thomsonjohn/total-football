@@ -1,45 +1,28 @@
-import React from "react";
+import React, { Component } from "react";
+import PropTypes from "prop-types";
 
-import "./FixtureView.css";
 import FixtureList from "../FixtureList/FixtureList";
 
-const FixtureView = props => {
-  const {
-    matchday,
-    matchdays,
-    selectedMatchday,
-    teams,
-    currentMatchday,
-    leagueCode
-  } = props;
-  let content;
-
-  if (selectedMatchday === "current") {
-    content = (
-      <FixtureList
-        matchdayId={currentMatchday}
-        matchday={matchday}
-        teams={teams}
-        leagueCode={leagueCode}
-      />
+export default class FixtureView extends Component {
+  render() {
+    const { matchdaysToShow, selectedLeague } = this.props;
+    return (
+      <div className="fixture-view">
+        {matchdaysToShow.map((matchday, i) => {
+          return (
+            <FixtureList
+              key={i}
+              matchday={matchday}
+              selectedLeague={selectedLeague}
+            />
+          );
+        })}
+      </div>
     );
-  } else {
-    content = matchdays.map((day, index) => {
-      if (day.month === selectedMatchday) {
-        return (
-          <FixtureList
-            key={index}
-            matchday={day.matches}
-            matchdayId={day.matchday}
-            teams={teams}
-            leagueCode={leagueCode}
-          />
-        );
-      }
-    });
   }
+}
 
-  return <section className="fixture-view">{content}</section>;
+FixtureView.propTypes = {
+  matchdaysToShow: PropTypes.array.isRequired,
+  selectedLeague: PropTypes.string.isRequired
 };
-
-export default FixtureView;

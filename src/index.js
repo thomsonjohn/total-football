@@ -1,8 +1,9 @@
+import "babel-polyfill";
+
 import React from "react";
 import { render } from "react-dom";
-import "./index.css";
-import App from "./components/App/App";
-import registerServiceWorker from "./registerServiceWorker";
+import Root from "./containers/Root";
 
-render(<App />, document.getElementById("root"));
-registerServiceWorker();
+import "./index.css";
+
+render(<Root />, document.getElementById("root"));

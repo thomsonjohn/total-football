@@ -1,3 +1,5 @@
+/*eslint-disable*/
+
 import teams from "../data/teams";
 
 export const getTeamData = (match, league) => {
