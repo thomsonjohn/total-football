@@ -1,11 +1,10 @@
 import fetch from "cross-fetch";
-import moment from "moment";
 
-let months;
-let arrayOfMatchdays = [];
-let matchdays = [];
-let monthlyMatches = [];
-let matchdaysToShow = [];
+import {
+  getMatchdaysToShow,
+  getMonthsInLeague,
+  sortMatchesByMonth
+} from "../utils/get-football-data";
 
 const API_KEY = process.env.REACT_APP_FOOTBALL_API_KEY;
 
@@ -14,6 +13,15 @@ export const RECEIVE_MATCHES = "RECEIVE_MATCHES";
 export const SELECT_LEAGUE = "SELECT_LEAGUE";
 export const SELECT_MONTH = "SELECT_MONTH";
 export const INVALIDATE_LEAGUE = "INVALIDATE_LEAGUE";
+export const UPDATE_MATCHES_TO_SHOW = "UPDATE_MATCHES_TO_SHOW";
+
+export function updateMatchesToShow(leagueCode, matches) {
+  return {
+    type: UPDATE_MATCHES_TO_SHOW,
+    matches,
+    leagueCode
+  };
+}
 
 export function selectLeague(leagueCode) {
   return {
@@ -79,98 +87,20 @@ function fetchMatches(leagueCode, selectedMonth) {
       .then(json => {
         const monthsInLeague = getMonthsInLeague(json);
         const matchesByMonth = sortMatchesByMonth(json);
-        debugger;
-        const getMatchdaysToShowFunc = getMatchdaysToShow(json, "current");
+        const matchesToShow = getMatchdaysToShow(json, selectedMonth);
         dispatch(
           receiveMatches(
             leagueCode,
             json,
             matchesByMonth,
             monthsInLeague,
-            getMatchdaysToShowFunc
+            matchesToShow,
+            selectedMonth
           )
         );
+        dispatch(updateMatchesToShowIfNeeded(json, selectedMonth, leagueCode));
       });
   };
-}
-
-function getMatchdaysToShow(data, selectedMonth) {
-  matchdaysToShow = [];
-  if (selectedMonth !== "current") {
-    monthlyMatches.map(month => {
-      if (month.month === selectedMonth) {
-        matchdaysToShow.push(month.matchdays);
-      }
-      return matchdaysToShow;
-    });
-  } else {
-    matchdays.map(matchday => {
-      if (matchday.matchday === data.matches[0].season.currentMatchday) {
-        matchdaysToShow.push(matchday);
-      }
-      return matchdaysToShow;
-    });
-  }
-  return matchdaysToShow;
-}
-
-function getMonthsInLeague(data) {
-  months = [];
-  data.matches.map(match => {
-    const month = moment(match.utcDate).format("MMMM");
-    var foundMonth = months.some(el => {
-      return el === month;
-    });
-    if (!foundMonth) {
-      months.push(month);
-    }
-    return months;
-  });
-  return months;
-}
-
-function sortMatchesByMonth(data) {
-  matchdays = [];
-  arrayOfMatchdays = [];
-  monthlyMatches = [];
-  data.matches.map(match => {
-    var foundMatchday = arrayOfMatchdays.some(el => {
-      return el === match.matchday;
-    });
-    if (!foundMatchday) {
-      arrayOfMatchdays.push(match.matchday);
-      matchdays.push({
-        matchday: match.matchday,
-        month: moment(match.utcDate).format("MMMM"),
-        matches: [match]
-      });
-    } else {
-      matchdays.map(day => {
-        if (day.matchday === match.matchday) {
-          day.matches.push(match);
-        }
-        return matchdays;
-      });
-    }
-    return matchdays;
-  });
-  matchdays.map(matchday => {
-    var foundMonth = monthlyMatches.some(el => {
-      return el.month === matchday.month;
-    });
-    if (!foundMonth) {
-      monthlyMatches.push({ month: matchday.month, matchdays: [matchday] });
-    } else {
-      monthlyMatches.map(month => {
-        if (month.month === matchday.month) {
-          month.matchdays.push(matchday);
-        }
-        return monthlyMatches;
-      });
-    }
-    return monthlyMatches;
-  });
-  return monthlyMatches;
 }
 
 function shouldFetchLeagues(state, leagueCode) {
@@ -184,10 +114,22 @@ function shouldFetchLeagues(state, leagueCode) {
   }
 }
 
-export function fetchMatchesIfNeeded(leagueCode, selectedMonth) {
+export function updateMatchesToShowIfNeeded(leagueData, month, leagueCode) {
+  console.log(leagueData, month, leagueCode);
+  const matchesToShow = getMatchdaysToShow(leagueData, month);
+  return dispatch => {
+    return dispatch(updateMatchesToShow(leagueCode, matchesToShow));
+  };
+}
+
+export function fetchMatchesIfNeeded(leagueCode, selectedMonth, leagueData) {
   return (dispatch, getState) => {
     if (shouldFetchLeagues(getState(), leagueCode)) {
       return dispatch(fetchMatches(leagueCode, selectedMonth));
+    } else {
+      return dispatch(
+        updateMatchesToShowIfNeeded(leagueData, selectedMonth, leagueCode)
+      );
     }
   };
 }

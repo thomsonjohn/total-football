@@ -11,11 +11,12 @@ export default class FixtureList extends Component {
     return (
       <div className="fixture-list">
         <h2 className="fixture-list-head">Matchday {matchday.matchday}</h2>
-        {matchday.matches.map((match, i) => {
-          return (
-            <Fixture key={i} match={match} selectedLeague={selectedLeague} />
-          );
-        })}
+        {matchday &&
+          matchday.matches.map((match, i) => {
+            return (
+              <Fixture key={i} match={match} selectedLeague={selectedLeague} />
+            );
+          })}
       </div>
     );
   }

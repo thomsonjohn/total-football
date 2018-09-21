@@ -14,7 +14,13 @@ import leagues from "../../data/leagues";
 
 export default class ControlPanel extends Component {
   render() {
-    const { selectedLeague, onLeagueChange } = this.props;
+    const {
+      selectedLeague,
+      selectedMonth,
+      onLeagueChange,
+      monthsInLeague,
+      onMonthChange
+    } = this.props;
     let leagueLogo;
 
     if (selectedLeague === "2021") {
@@ -54,8 +60,11 @@ export default class ControlPanel extends Component {
                 );
               })}
           </select>
-          {/* <label>Matches:</label>
-          <select onChange={event => this.handleMonthChange(event)}>
+          <label>Matches:</label>
+          <select
+            value={selectedMonth}
+            onChange={e => onMonthChange(e.target.value)}
+          >
             <option value="current">Current</option>
             {monthsInLeague &&
               monthsInLeague.map((option, index) => {
@@ -65,7 +74,7 @@ export default class ControlPanel extends Component {
                   </option>
                 );
               })}
-          </select> */}
+          </select>
         </form>
       </section>
     );

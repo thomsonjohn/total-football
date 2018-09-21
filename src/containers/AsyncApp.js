@@ -5,7 +5,8 @@ import moment from "moment";
 import {
   selectLeague,
   fetchMatchesIfNeeded,
-  invalidateLeague
+  invalidateLeague,
+  selectMonth
 } from "../actions/actions";
 import Header from "../components/Header/Header";
 import ControlPanel from "../components/ControlPanel/ControlPanel";
@@ -19,40 +20,64 @@ class AsyncApp extends Component {
   constructor(props) {
     super(props);
     this.handleLeagueChange = this.handleLeagueChange.bind(this);
+    this.handleMonthChange = this.handleMonthChange.bind(this);
     this.handleRefreshClick = this.handleRefreshClick.bind(this);
   }
 
   componentDidMount() {
-    const { dispatch, selectedLeague } = this.props;
-    dispatch(fetchMatchesIfNeeded(selectedLeague));
+    const { dispatch, selectedLeague, selectedMonth } = this.props;
+    dispatch(fetchMatchesIfNeeded(selectedLeague, selectedMonth));
   }
 
-  componentDidUpdate(prevProps) {
-    if (this.props.selectedLeague !== prevProps.selectedLeague) {
-      const { dispatch, selectedLeague } = this.props;
-      dispatch(fetchMatchesIfNeeded(selectedLeague));
-    }
-  }
+  // componentDidUpdate(prevProps) {
+  //   if (
+  //     this.props.selectedLeague !== prevProps.selectedLeague ||
+  //     this.props.selectedMonth !== prevProps.selectedMonth
+  //   ) {
+  //     const { dispatch, selectedLeague, selectedMonth } = this.props;
+  //     dispatch(fetchMatchesIfNeeded(selectedLeague, selectedMonth));
+  //   }
+  // }
 
   handleLeagueChange(nextLeague) {
+    this.props.dispatch(invalidateLeague(nextLeague));
     this.props.dispatch(selectLeague(nextLeague));
-    this.props.dispatch(fetchMatchesIfNeeded(nextLeague));
+    this.props.dispatch(
+      fetchMatchesIfNeeded(
+        nextLeague,
+        this.props.selectedMonth,
+        this.props.leagueData
+      )
+    );
+  }
+
+  handleMonthChange(nextMonth) {
+    this.props.dispatch(selectMonth(nextMonth));
+    this.props.dispatch(
+      fetchMatchesIfNeeded(
+        this.props.selectedLeague,
+        nextMonth,
+        this.props.leagueData
+      )
+    );
   }
 
   handleRefreshClick(e) {
     e.preventDefault();
 
-    const { dispatch, selectedLeague } = this.props;
+    const { dispatch, selectedLeague, selectedMonth } = this.props;
     dispatch(invalidateLeague(selectedLeague));
-    dispatch(fetchMatchesIfNeeded(selectedLeague));
+    dispatch(fetchMatchesIfNeeded(selectedLeague, selectedMonth));
   }
 
   render() {
     const {
       selectedLeague,
+      selectedMonth,
       leagueData,
       isFetching,
       lastUpdated,
+      monthsInLeague,
       matchdaysToShow
     } = this.props;
     return (
@@ -60,19 +85,29 @@ class AsyncApp extends Component {
         <Header />
         <ControlPanel
           selectedLeague={selectedLeague}
+          selectedMonth={selectedMonth}
           onLeagueChange={this.handleLeagueChange}
+          onMonthChange={this.handleMonthChange}
+          monthsInLeague={monthsInLeague}
         />
         <p>
           {lastUpdated && (
-            <span>Last updated at {moment(lastUpdated).fromNow()}.</span>
+            <span className="last-updated">
+              Last updated at {moment(lastUpdated).fromNow()}.
+            </span>
           )}
-          {!isFetching && (
-            <button onClick={this.handleRefreshClick}>Refresh</button>
-          )}
+          {/* {!isFetching && (
+            <button
+              className="refresh-button"
+              onClick={this.handleRefreshClick}
+            >
+              Refresh
+            </button>
+          )} */}
         </p>
         {isFetching && !leagueData.matches && <LoadingSpinner />}
         {!isFetching && !leagueData.matches && <h2>Empty.</h2>}
-        {matchdaysToShow && (
+        {matchdaysToShow.length > 0 && (
           <div style={{ opacity: isFetching ? 0.5 : 1 }}>
             <FixtureView
               matchdaysToShow={matchdaysToShow}
@@ -87,6 +122,7 @@ class AsyncApp extends Component {
 }
 
 AsyncApp.propTypes = {
+  selectedMonth: PropTypes.string.isRequired,
   selectedLeague: PropTypes.string.isRequired,
   leagueData: PropTypes.object.isRequired,
   isFetching: PropTypes.bool.isRequired,
@@ -96,21 +132,25 @@ AsyncApp.propTypes = {
 };
 
 function mapStateToProps(state) {
-  const { selectedLeague, matchesByLeague } = state;
+  const { selectedMonth, selectedLeague, matchesByLeague } = state;
   const {
     isFetching,
     lastUpdated,
     leagueData,
+    monthsInLeague,
     matchdaysToShow
   } = matchesByLeague[selectedLeague] || {
     isFetching: true,
     leagueData: {},
+    monthsInLeague: [],
     matchdaysToShow: []
   };
 
   return {
+    selectedMonth,
     selectedLeague,
     leagueData,
+    monthsInLeague,
     isFetching,
     lastUpdated,
     matchdaysToShow

@@ -1,10 +1,21 @@
 import { combineReducers } from "redux";
 import {
+  SELECT_MONTH,
   SELECT_LEAGUE,
   INVALIDATE_LEAGUE,
   REQUEST_MATCHES,
-  RECEIVE_MATCHES
+  RECEIVE_MATCHES,
+  UPDATE_MATCHES_TO_SHOW
 } from "../actions/actions";
+
+function selectedMonth(state = "current", action) {
+  switch (action.type) {
+    case SELECT_MONTH:
+      return action.month;
+    default:
+      return state;
+  }
+}
 
 function selectedLeague(state = "2021", action) {
   switch (action.type) {
@@ -21,8 +32,7 @@ function matches(
     isFetching: false,
     didInvalidate: false,
     leagueData: {},
-    matchdaysToShow: [],
-    selectedLeague: ""
+    matchdaysToShow: []
   },
   action
 ) {
@@ -45,8 +55,11 @@ function matches(
         matchesByMonth: action.matchesByMonth,
         currentMatchday: action.leagueData.matches[0].season.currentMatchday,
         monthsInLeague: action.monthsInLeague,
-        matchdaysToShow: action.matchdaysToShow,
-        selectedLeague: action.leagueData.competition.id
+        matchdaysToShow: action.matchdaysToShow
+      });
+    case UPDATE_MATCHES_TO_SHOW:
+      return Object.assign({}, state, {
+        matchdaysToShow: action.matches
       });
     default:
       return state;
@@ -58,6 +71,7 @@ function matchesByLeague(state = {}, action) {
     case INVALIDATE_LEAGUE:
     case RECEIVE_MATCHES:
     case REQUEST_MATCHES:
+    case UPDATE_MATCHES_TO_SHOW:
       return Object.assign({}, state, {
         [action.leagueCode]: matches(state[action.leagueCode], action)
       });
@@ -68,7 +82,8 @@ function matchesByLeague(state = {}, action) {
 
 const rootReducer = combineReducers({
   matchesByLeague,
-  selectedLeague
+  selectedLeague,
+  selectedMonth
 });
 
 export default rootReducer;

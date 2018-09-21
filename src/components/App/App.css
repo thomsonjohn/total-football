@@ -54,3 +54,19 @@ ul {
     flex-direction: row;
   }
 }
+
+.last-updated {
+  font-family: "Roboto Mono", monospace;
+  font-size: 0.8em;
+  padding: 0 1em 0 1.2em;
+}
+
+.refresh-button {
+  padding: 0.6em;
+  border-radius: 50px;
+  background: none;
+  border: 1px solid #31ac22;
+  font-size: 0.6em;
+  font-family: "Roboto Mono", monospace;
+  color: #31ac22;
+}
