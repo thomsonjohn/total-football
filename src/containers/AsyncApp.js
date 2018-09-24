@@ -13,6 +13,7 @@ import ControlPanel from "../components/ControlPanel/ControlPanel";
 import FixtureView from "../components/FixtureView/FixtureView";
 import LoadingSpinner from "../components/LoadingSpinner/LoadingSpinner";
 import Footer from "../components/Footer/Footer";
+import Error from "../components/Error/Error";
 
 import "../components/App/App.css";
 
@@ -78,7 +79,8 @@ class AsyncApp extends Component {
       isFetching,
       lastUpdated,
       monthsInLeague,
-      matchdaysToShow
+      matchdaysToShow,
+      error
     } = this.props;
     return (
       <div>
@@ -105,7 +107,8 @@ class AsyncApp extends Component {
             </button>
           )} */}
         </p>
-        {isFetching && !leagueData.matches && <LoadingSpinner />}
+        {isFetching && !leagueData.matches && !error && <LoadingSpinner />}
+        {error && <Error message={error} />}
         {!isFetching && !leagueData.matches && <h2>Empty.</h2>}
         {matchdaysToShow.length > 0 && (
           <div style={{ opacity: isFetching ? 0.5 : 1 }}>
@@ -132,7 +135,7 @@ AsyncApp.propTypes = {
 };
 
 function mapStateToProps(state) {
-  const { selectedMonth, selectedLeague, matchesByLeague } = state;
+  const { selectedMonth, selectedLeague, matchesByLeague, error } = state;
   const {
     isFetching,
     lastUpdated,
@@ -153,7 +156,8 @@ function mapStateToProps(state) {
     monthsInLeague,
     isFetching,
     lastUpdated,
-    matchdaysToShow
+    matchdaysToShow,
+    error
   };
 }
 

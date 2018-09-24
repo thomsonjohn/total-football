@@ -14,6 +14,14 @@ export const SELECT_LEAGUE = "SELECT_LEAGUE";
 export const SELECT_MONTH = "SELECT_MONTH";
 export const INVALIDATE_LEAGUE = "INVALIDATE_LEAGUE";
 export const UPDATE_MATCHES_TO_SHOW = "UPDATE_MATCHES_TO_SHOW";
+export const FETCH_FAILURE = "FETCH_FAILURE";
+
+export function fetchFailure(error) {
+  return {
+    type: FETCH_FAILURE,
+    error
+  };
+}
 
 export function updateMatchesToShow(leagueCode, matches) {
   return {
@@ -99,6 +107,10 @@ function fetchMatches(leagueCode, selectedMonth) {
           )
         );
         dispatch(updateMatchesToShowIfNeeded(json, selectedMonth, leagueCode));
+      })
+      .catch(err => {
+        console.log(err);
+        dispatch(fetchFailure(err.message));
       });
   };
 }
@@ -115,7 +127,6 @@ function shouldFetchLeagues(state, leagueCode) {
 }
 
 export function updateMatchesToShowIfNeeded(leagueData, month, leagueCode) {
-  console.log(leagueData, month, leagueCode);
   const matchesToShow = getMatchdaysToShow(leagueData, month);
   return dispatch => {
     return dispatch(updateMatchesToShow(leagueCode, matchesToShow));

@@ -5,8 +5,18 @@ import {
   INVALIDATE_LEAGUE,
   REQUEST_MATCHES,
   RECEIVE_MATCHES,
-  UPDATE_MATCHES_TO_SHOW
+  UPDATE_MATCHES_TO_SHOW,
+  FETCH_FAILURE
 } from "../actions/actions";
+
+function error(state = null, action) {
+  switch (action.type) {
+    case FETCH_FAILURE:
+      return action.error;
+    default:
+      return state;
+  }
+}
 
 function selectedMonth(state = "current", action) {
   switch (action.type) {
@@ -83,7 +93,8 @@ function matchesByLeague(state = {}, action) {
 const rootReducer = combineReducers({
   matchesByLeague,
   selectedLeague,
-  selectedMonth
+  selectedMonth,
+  error
 });
 
 export default rootReducer;
