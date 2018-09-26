@@ -9,8 +9,7 @@ import {
   selectMonth
 } from "../actions/actions";
 import Header from "../components/Header/Header";
-import ControlPanel from "../components/ControlPanel/ControlPanel";
-import FixtureView from "../components/FixtureView/FixtureView";
+import Main from "./Main";
 import LoadingSpinner from "../components/LoadingSpinner/LoadingSpinner";
 import Footer from "../components/Footer/Footer";
 import Error from "../components/Error/Error";
@@ -29,16 +28,6 @@ class AsyncApp extends Component {
     const { dispatch, selectedLeague, selectedMonth } = this.props;
     dispatch(fetchMatchesIfNeeded(selectedLeague, selectedMonth));
   }
-
-  // componentDidUpdate(prevProps) {
-  //   if (
-  //     this.props.selectedLeague !== prevProps.selectedLeague ||
-  //     this.props.selectedMonth !== prevProps.selectedMonth
-  //   ) {
-  //     const { dispatch, selectedLeague, selectedMonth } = this.props;
-  //     dispatch(fetchMatchesIfNeeded(selectedLeague, selectedMonth));
-  //   }
-  // }
 
   handleLeagueChange(nextLeague) {
     this.props.dispatch(invalidateLeague(nextLeague));
@@ -85,36 +74,25 @@ class AsyncApp extends Component {
     return (
       <div>
         <Header />
-        <ControlPanel
-          selectedLeague={selectedLeague}
-          selectedMonth={selectedMonth}
-          onLeagueChange={this.handleLeagueChange}
-          onMonthChange={this.handleMonthChange}
-          monthsInLeague={monthsInLeague}
-        />
         <p>
           {lastUpdated && (
             <span className="last-updated">
               Last updated at {moment(lastUpdated).fromNow()}.
             </span>
           )}
-          {/* {!isFetching && (
-            <button
-              className="refresh-button"
-              onClick={this.handleRefreshClick}
-            >
-              Refresh
-            </button>
-          )} */}
         </p>
         {isFetching && !leagueData.matches && !error && <LoadingSpinner />}
         {error && <Error message={error} />}
         {!isFetching && !leagueData.matches && <h2>Empty.</h2>}
         {matchdaysToShow.length > 0 && (
           <div style={{ opacity: isFetching ? 0.5 : 1 }}>
-            <FixtureView
-              matchdaysToShow={matchdaysToShow}
+            <Main
               selectedLeague={selectedLeague}
+              selectedMonth={selectedMonth}
+              onLeagueChange={this.handleLeagueChange}
+              onMonthChange={this.handleMonthChange}
+              monthsInLeague={monthsInLeague}
+              matchdaysToShow={matchdaysToShow}
             />
           </div>
         )}

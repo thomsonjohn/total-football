@@ -1,15 +1,33 @@
-import { createStore, applyMiddleware } from "redux";
+import { createStore, applyMiddleware, combineReducers } from "redux";
+import { router5Middleware, router5Reducer } from "redux-router5";
 import { composeWithDevTools } from "redux-devtools-extension";
 import thunkMiddleware from "redux-thunk";
 import { createLogger } from "redux-logger";
-import rootReducer from "../reducers/reducers";
+import {
+  matchesByLeague,
+  selectedLeague,
+  selectedMonth,
+  error
+} from "../reducers/reducers";
 
 const loggerMiddleware = createLogger();
 
-export default function configureStore(preloadedState) {
+export default function configureStore(router, preloadedState) {
   return createStore(
-    rootReducer,
+    combineReducers({
+      matchesByLeague,
+      selectedLeague,
+      selectedMonth,
+      error,
+      router: router5Reducer
+    }),
     preloadedState,
-    composeWithDevTools(applyMiddleware(thunkMiddleware, loggerMiddleware))
+    composeWithDevTools(
+      applyMiddleware(
+        router5Middleware(router),
+        thunkMiddleware,
+        loggerMiddleware
+      )
+    )
   );
 }

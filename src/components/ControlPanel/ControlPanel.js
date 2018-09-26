@@ -50,7 +50,10 @@ export default class ControlPanel extends Component {
         </div>
         <form className="control-panel__form">
           <label>League:</label>
-          <select onChange={e => onLeagueChange(e.target.value)}>
+          <select
+            value={selectedLeague}
+            onChange={e => onLeagueChange(e.target.value)}
+          >
             {leagues &&
               leagues.map((league, index) => {
                 return (
