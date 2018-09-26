@@ -9,7 +9,14 @@ const NotFound = () => {
         Uh oh! Something went wrong. The page you are looking for cannot be
         found.
       </h2>
-      <p>🕵🏻‍♂️ 🤷🏻‍♂️</p>
+      <p>
+        <span role="img" aria-label="detective">
+          🕵🏻‍♂️
+        </span>{" "}
+        <span role="img" aria-label="shrug">
+          🤷🏻‍♂️
+        </span>
+      </p>
     </div>
   );
 };

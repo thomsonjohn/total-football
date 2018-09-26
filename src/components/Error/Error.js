@@ -1,19 +1,16 @@
 import React from "react";
-import "./Error.css";
 
-import errorImage from "../../assets/img/oops.jpg";
+import "./Error.css";
 
 const Error = () => {
   return (
     <div className="error">
-      <p className="error-text">
-        Oops! Something went wrong{" "}
-        <span role="img" aria-label="oops">
+      <h2>Uh oh! Something went wrong. Please try again in a few minutes.</h2>
+      <p>
+        <span role="img" aria-label="sweating">
           😓
         </span>
       </p>
-      <img className="error-img" src={errorImage} alt="Neymar" />
-      <p className="error-text">Try again later</p>
     </div>
   );
 };

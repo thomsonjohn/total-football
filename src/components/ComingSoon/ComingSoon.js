@@ -11,7 +11,12 @@ const ComingSoon = props => {
         {name} is still in development... <strong>watch this space!</strong>
       </h2>
       <p>
-        <span>👷🏻‍♂️ 👀</span>
+        <span role="img" aria-label="builder">
+          👷🏻‍♂️
+        </span>{" "}
+        <span role="img" aria-label="eyes">
+          👀
+        </span>
       </p>
     </div>
   );
