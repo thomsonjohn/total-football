@@ -3,8 +3,8 @@ import { connect } from "react-redux";
 import { createRouteNodeSelector } from "redux-router5";
 
 import Scores from "../components/Scores/Scores";
-import Test from "../components/Test";
-import NotFound from "../components/NotFound";
+import ComingSoon from "../components/ComingSoon/ComingSoon";
+import NotFound from "../components/NotFound/NotFound";
 
 const Main = ({
   route,
@@ -30,8 +30,12 @@ const Main = ({
     );
   }
 
-  if (topRouteName === "test") {
-    return <Test />;
+  if (topRouteName === "league-table") {
+    return <ComingSoon name="League table" />;
+  }
+
+  if (topRouteName === "account") {
+    return <ComingSoon name="Account" />;
   }
 
   return <NotFound />;

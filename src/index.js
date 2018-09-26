@@ -4,7 +4,7 @@ import React from "react";
 import { Provider } from "react-redux";
 import { render } from "react-dom";
 import { RouterProvider } from "react-router5";
-import AsyncApp from "./containers/AsyncApp";
+import AsyncApp from "./containers/App/AsyncApp";
 import createRouter from "./create-router";
 import configureStore from "./store/configureStore";
 

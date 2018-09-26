@@ -1,0 +1,14 @@
+.not-found {
+  padding: 5em 1em;
+}
+
+.not-found > h2 {
+  font-family: "Roboto Mono", monospace;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.not-found > p {
+  text-align: center;
+  font-size: 3rem;
+}

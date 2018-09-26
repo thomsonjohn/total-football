@@ -7,12 +7,13 @@ import {
   fetchMatchesIfNeeded,
   invalidateLeague,
   selectMonth
-} from "../actions/actions";
-import Header from "../components/Header/Header";
-import Main from "./Main";
-import LoadingSpinner from "../components/LoadingSpinner/LoadingSpinner";
-import Footer from "../components/Footer/Footer";
-import Error from "../components/Error/Error";
+} from "../../actions/actions";
+import Header from "../../components/Header/Header";
+import Nav from "../Nav/Nav";
+import Main from "../Main";
+import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
+import Footer from "../../components/Footer/Footer";
+import Error from "../../components/Error/Error";
 
 import "./App.css";
 
@@ -72,30 +73,33 @@ class AsyncApp extends Component {
       error
     } = this.props;
     return (
-      <div>
-        <Header />
-        <p>
+      <div className="app">
+        <div className="content">
+          <Header />
+          <Nav />
+          {/* <p>
           {lastUpdated && (
             <span className="last-updated">
               Last updated at {moment(lastUpdated).fromNow()}.
             </span>
           )}
-        </p>
-        {isFetching && !leagueData.matches && !error && <LoadingSpinner />}
-        {error && <Error message={error} />}
-        {!isFetching && !leagueData.matches && <h2>Empty.</h2>}
-        {matchdaysToShow.length > 0 && (
-          <div style={{ opacity: isFetching ? 0.5 : 1 }}>
-            <Main
-              selectedLeague={selectedLeague}
-              selectedMonth={selectedMonth}
-              onLeagueChange={this.handleLeagueChange}
-              onMonthChange={this.handleMonthChange}
-              monthsInLeague={monthsInLeague}
-              matchdaysToShow={matchdaysToShow}
-            />
-          </div>
-        )}
+        </p> */}
+          {isFetching && !leagueData.matches && !error && <LoadingSpinner />}
+          {error && <Error message={error} />}
+          {!isFetching && !leagueData.matches && <h2>Empty.</h2>}
+          {matchdaysToShow.length > 0 && (
+            <div style={{ opacity: isFetching ? 0.5 : 1 }}>
+              <Main
+                selectedLeague={selectedLeague}
+                selectedMonth={selectedMonth}
+                onLeagueChange={this.handleLeagueChange}
+                onMonthChange={this.handleMonthChange}
+                monthsInLeague={monthsInLeague}
+                matchdaysToShow={matchdaysToShow}
+              />
+            </div>
+          )}
+        </div>
         <Footer />
       </div>
     );
