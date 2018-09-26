@@ -14,7 +14,7 @@ import LoadingSpinner from "../components/LoadingSpinner/LoadingSpinner";
 import Footer from "../components/Footer/Footer";
 import Error from "../components/Error/Error";
 
-import "../components/App/App.css";
+import "./App.css";
 
 class AsyncApp extends Component {
   constructor(props) {
