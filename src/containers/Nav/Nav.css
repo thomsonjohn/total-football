@@ -1,0 +1,25 @@
+nav {
+  display: flex;
+  background-color: #f5f5f5;
+}
+
+nav > a {
+  flex: 1;
+  text-align: center;
+  text-decoration: none;
+  font-family: "Roboto Mono", monospace;
+  font-size: 0.8rem;
+  color: #31ac22;
+  padding: 0.5rem;
+  border-right: 1px solid lightgrey;
+}
+
+nav > a:last-child {
+  border-right: none;
+}
+
+nav > a.active {
+  background-color: #92de7e;
+  color: #fff;
+  border-right: none;
+}

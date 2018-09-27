@@ -1,14 +1,15 @@
-.error {
+.coming-soon {
   padding: 5em 1em;
 }
 
-.error > h2 {
+.coming-soon > h2 {
   font-family: "Roboto Mono", monospace;
   font-size: 1rem;
   text-align: center;
+  font-weight: 100;
 }
 
-.error > p {
+.coming-soon > p {
   text-align: center;
   font-size: 3rem;
 }

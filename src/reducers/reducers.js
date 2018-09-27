@@ -9,7 +9,7 @@ import {
   FETCH_FAILURE
 } from "../actions/actions";
 
-function error(state = null, action) {
+export function error(state = null, action) {
   switch (action.type) {
     case FETCH_FAILURE:
       return action.error;
@@ -18,7 +18,7 @@ function error(state = null, action) {
   }
 }
 
-function selectedMonth(state = "current", action) {
+export function selectedMonth(state = "current", action) {
   switch (action.type) {
     case SELECT_MONTH:
       return action.month;
@@ -27,7 +27,7 @@ function selectedMonth(state = "current", action) {
   }
 }
 
-function selectedLeague(state = "2021", action) {
+export function selectedLeague(state = "2021", action) {
   switch (action.type) {
     case SELECT_LEAGUE:
       console.log(action);
@@ -76,7 +76,7 @@ function matches(
   }
 }
 
-function matchesByLeague(state = {}, action) {
+export function matchesByLeague(state = {}, action) {
   switch (action.type) {
     case INVALIDATE_LEAGUE:
     case RECEIVE_MATCHES:
