@@ -4,11 +4,17 @@ import "./Header.css";
 
 import logo from "../../assets/img/football-badge.png";
 
-const Header = () => {
+const Header = props => {
+  const { profilePic, name } = props;
   return (
     <header>
-      <img className="header__logo" src={logo} alt="logo" />
-      <h1 className="header__title">Total Football</h1>
+      <div className="header__left">
+        <img className="header__logo" src={logo} alt="logo" />
+        <h1 className="header__title">Total Football</h1>
+      </div>
+      <div className="header__right">
+        <img className="header__profile-pic" src={profilePic} alt="profile" />
+      </div>
     </header>
   );
 };

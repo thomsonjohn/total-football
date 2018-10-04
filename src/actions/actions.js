@@ -15,6 +15,14 @@ export const SELECT_MONTH = "SELECT_MONTH";
 export const INVALIDATE_LEAGUE = "INVALIDATE_LEAGUE";
 export const UPDATE_MATCHES_TO_SHOW = "UPDATE_MATCHES_TO_SHOW";
 export const FETCH_FAILURE = "FETCH_FAILURE";
+export const AUTH_STATE_CHANGE = "AUTH_STATE_CHANGE";
+
+export function authStateChange(user) {
+  return {
+    type: AUTH_STATE_CHANGE,
+    user
+  };
+}
 
 export function fetchFailure(error) {
   return {

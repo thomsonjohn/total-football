@@ -7,7 +7,8 @@ import {
   matchesByLeague,
   selectedLeague,
   selectedMonth,
-  error
+  error,
+  isSignedIn
 } from "../reducers/reducers";
 
 const loggerMiddleware = createLogger();
@@ -19,6 +20,7 @@ export default function configureStore(router, preloadedState) {
       selectedLeague,
       selectedMonth,
       error,
+      isSignedIn,
       router: router5Reducer
     }),
     preloadedState,
