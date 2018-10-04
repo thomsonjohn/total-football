@@ -1,0 +1,51 @@
+.profile-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.profile {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile > p {
+  text-align: center;
+  font-family: "Roboto Mono", monospace;
+  margin: 1rem 0 0 0;
+  font-size: 0.8rem;
+  color: grey;
+}
+
+.profile > h1 {
+  text-align: center;
+  font-family: "Roboto Mono", monospace;
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.profile-pic {
+  height: 150px;
+  width: 150px;
+  margin: 2rem auto 1rem;
+  border-radius: 50%;
+}
+
+.login-buttons {
+  margin: 2rem auto;
+}
+
+.logout-button {
+  margin: 2rem auto;
+  width: 100px;
+  padding: 0.5rem 1rem;
+  border: 2px solid crimson;
+  color: crimson;
+  border-radius: 30px;
+}
+
+.logout-button:hover {
+  background-color: crimson;
+  border: 2px solid crimson;
+  color: #fff;
+}

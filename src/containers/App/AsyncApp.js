@@ -1,11 +1,13 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import firebase from "firebase";
 import {
   selectLeague,
   fetchMatchesIfNeeded,
   invalidateLeague,
-  selectMonth
+  selectMonth,
+  authStateChange
 } from "../../actions/actions";
 import Header from "../../components/Header/Header";
 import Nav from "../Nav/Nav";
@@ -14,7 +16,14 @@ import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import Footer from "../../components/Footer/Footer";
 import Error from "../../components/Error/Error";
 
+import defaultProfilePic from "../../assets/img/user.png";
+
 import "./App.css";
+
+firebase.initializeApp({
+  apiKey: "AIzaSyCwNzYK-dqakMMLvZfWjAT9EkFjLkjjanc",
+  authDomain: "total-football-90b6f.firebaseapp.com"
+});
 
 class AsyncApp extends Component {
   constructor(props) {
@@ -26,6 +35,9 @@ class AsyncApp extends Component {
 
   componentDidMount() {
     const { dispatch, selectedLeague, selectedMonth } = this.props;
+    firebase.auth().onAuthStateChanged(user => {
+      dispatch(authStateChange(user));
+    });
     dispatch(fetchMatchesIfNeeded(selectedLeague, selectedMonth));
   }
 
@@ -69,12 +81,26 @@ class AsyncApp extends Component {
       // lastUpdated,
       monthsInLeague,
       matchdaysToShow,
-      error
+      error,
+      isSignedIn
     } = this.props;
+
+    const profilePic = isSignedIn
+      ? firebase.auth().currentUser.photoURL
+      : defaultProfilePic;
+
+    const usersFirstName = isSignedIn
+      ? firebase
+          .auth()
+          .currentUser.displayName.split(" ")
+          .slice(0, -1)
+          .join(" ")
+      : "";
+
     return (
       <div className="app">
         <div className="content">
-          <Header />
+          <Header profilePic={profilePic} name={usersFirstName} />
           <Nav />
           {/* <p>
           {lastUpdated && (
@@ -95,6 +121,7 @@ class AsyncApp extends Component {
                 onMonthChange={this.handleMonthChange}
                 monthsInLeague={monthsInLeague}
                 matchdaysToShow={matchdaysToShow}
+                isSignedIn={isSignedIn}
               />
             </div>
           )}
@@ -116,7 +143,13 @@ AsyncApp.propTypes = {
 };
 
 function mapStateToProps(state) {
-  const { selectedMonth, selectedLeague, matchesByLeague, error } = state;
+  const {
+    selectedMonth,
+    selectedLeague,
+    matchesByLeague,
+    error,
+    isSignedIn
+  } = state;
   const {
     isFetching,
     lastUpdated,
@@ -138,7 +171,8 @@ function mapStateToProps(state) {
     isFetching,
     lastUpdated,
     matchdaysToShow,
-    error
+    error,
+    isSignedIn
   };
 }
 

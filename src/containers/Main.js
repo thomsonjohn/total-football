@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { createRouteNodeSelector } from "redux-router5";
 
 import Scores from "../components/Scores/Scores";
+import Profile from "../components/Profile/Profile";
 import ComingSoon from "../components/ComingSoon/ComingSoon";
 import NotFound from "../components/NotFound/NotFound";
 
@@ -13,7 +14,8 @@ const Main = ({
   onLeagueChange,
   onMonthChange,
   monthsInLeague,
-  matchdaysToShow
+  matchdaysToShow,
+  isSignedIn
 }) => {
   const topRouteName = route.name.split(".")[0];
 
@@ -35,7 +37,7 @@ const Main = ({
   }
 
   if (topRouteName === "account") {
-    return <ComingSoon name="Account" />;
+    return <Profile isSignedIn={isSignedIn} />;
   }
 
   return <NotFound />;

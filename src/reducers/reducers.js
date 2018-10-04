@@ -6,8 +6,18 @@ import {
   REQUEST_MATCHES,
   RECEIVE_MATCHES,
   UPDATE_MATCHES_TO_SHOW,
-  FETCH_FAILURE
+  FETCH_FAILURE,
+  AUTH_STATE_CHANGE
 } from "../actions/actions";
+
+export function isSignedIn(state = false, action) {
+  switch (action.type) {
+    case AUTH_STATE_CHANGE:
+      return !!action.user;
+    default:
+      return state;
+  }
+}
 
 export function error(state = null, action) {
   switch (action.type) {
@@ -94,7 +104,8 @@ const rootReducer = combineReducers({
   matchesByLeague,
   selectedLeague,
   selectedMonth,
-  error
+  error,
+  isSignedIn
 });
 
 export default rootReducer;
