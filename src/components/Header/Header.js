@@ -5,7 +5,7 @@ import "./Header.css";
 import logo from "../../assets/img/football-badge.png";
 
 const Header = props => {
-  const { profilePic, name } = props;
+  const { profilePic } = props;
   return (
     <header>
       <div className="header__left">

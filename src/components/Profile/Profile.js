@@ -22,16 +22,25 @@ class Profile extends Component {
 
   render() {
     const { isSignedIn } = this.props;
+    const currentUser = firebase.auth().currentUser;
+
+    let photoUrl;
+
+    if (isSignedIn) {
+      if (currentUser.providerData[0].providerId === "facebook.com") {
+        photoUrl = currentUser.photoURL + "?height=500";
+      } else if (currentUser.providerData[0].providerId === "twitter.com") {
+        photoUrl = currentUser.photoURL.replace("_normal", "");
+      } else {
+        photoUrl = currentUser.photoURL;
+      }
+    }
 
     return (
       <div className="profile-container">
         {isSignedIn ? (
           <div className="profile profile--signed-in">
-            <img
-              className="profile-pic"
-              alt="profile"
-              src={firebase.auth().currentUser.photoURL + "?height=500"}
-            />
+            <img className="profile-pic" alt="profile" src={photoUrl} />
             <h1>{firebase.auth().currentUser.displayName}</h1>
             <p>
               Total Football is still a work in progress. More features will be
