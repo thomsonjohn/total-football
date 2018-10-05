@@ -1,9 +1,11 @@
 import React, { Component } from "react";
 
+import moment from "moment";
 import firebase from "firebase";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 
 import defaultProfilePic from "../../assets/img/user.png";
+import defaultTeamBadge from "../../assets/img/shield.png";
 
 import "./Profile.css";
 
@@ -43,9 +45,50 @@ class Profile extends Component {
             <img className="profile-pic" alt="profile" src={photoUrl} />
             <h1>{firebase.auth().currentUser.displayName}</h1>
             <p>
-              Total Football is still a work in progress. More features will be
-              added here in future. Thank you!
+              Est.{" "}
+              {moment(firebase.auth().currentUser.metadata.creationTime).format(
+                "LL"
+              )}
             </p>
+            <div className="profile-teams">
+              <h3>Teams</h3>
+              <div className="profile-teams__grid">
+                <div className="profile-teams__cell">
+                  <img src={defaultTeamBadge} alt="team badge" />
+                  <p>No nation yet</p>
+                </div>
+                <div className="profile-teams__cell">
+                  <img src={defaultTeamBadge} alt="team badge" />
+                  <p>No club yet</p>
+                </div>
+              </div>
+            </div>
+            <div className="profile-rivals">
+              <h3>Rivals</h3>
+              <div className="profile-rivals__grid">
+                <div className="profile-rivals__grid-cell">
+                  <div className="rivals-badges">
+                    <img src={defaultProfilePic} alt="rival" />
+                    <img src={defaultTeamBadge} alt="badge" />
+                  </div>
+                  <p>Name</p>
+                </div>
+                <div className="profile-rivals__grid-cell">
+                  <div className="rivals-badges">
+                    <img src={defaultProfilePic} alt="rival" />
+                    <img src={defaultTeamBadge} alt="badge" />
+                  </div>
+                  <p>Name</p>
+                </div>
+                <div className="profile-rivals__grid-cell">
+                  <div className="rivals-badges">
+                    <img src={defaultProfilePic} alt="rival" />
+                    <img src={defaultTeamBadge} alt="badge" />
+                  </div>
+                  <p>Name</p>
+                </div>
+              </div>
+            </div>
             <button
               className="logout-button"
               onClick={() => firebase.auth().signOut()}
@@ -60,7 +103,6 @@ class Profile extends Component {
               src={defaultProfilePic}
               alt="profile"
             />
-            <p>You are not signed in.</p>
             <div className="login-buttons">
               <StyledFirebaseAuth
                 uiConfig={this.uiConfig}
