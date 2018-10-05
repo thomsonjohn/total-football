@@ -10,7 +10,6 @@ import {
   authStateChange
 } from "../../actions/actions";
 import Header from "../../components/Header/Header";
-import Nav from "../Nav/Nav";
 import Main from "../Main";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import Footer from "../../components/Footer/Footer";
@@ -22,8 +21,11 @@ import "./App.css";
 
 firebase.initializeApp({
   apiKey: "AIzaSyCwNzYK-dqakMMLvZfWjAT9EkFjLkjjanc",
-  authDomain: "total-football-90b6f.firebaseapp.com"
+  authDomain: "total-football-90b6f.firebaseapp.com",
+  databaseURL: "https://total-football-90b6f.firebaseio.com"
 });
+
+const database = firebase.database();
 
 class AsyncApp extends Component {
   constructor(props) {
@@ -37,6 +39,19 @@ class AsyncApp extends Component {
     const { dispatch, selectedLeague, selectedMonth } = this.props;
     firebase.auth().onAuthStateChanged(user => {
       dispatch(authStateChange(user));
+      if (user) {
+        console.log("writing to database with data" + user.displayName);
+        firebase
+          .database()
+          .ref("users/" + user.uid)
+          .set({
+            uid: user.uid,
+            email: user.email,
+            displayName: user.displayName,
+            photo: user.photoURL,
+            provider: user.providerData[0].providerId
+          });
+      }
     });
     dispatch(fetchMatchesIfNeeded(selectedLeague, selectedMonth));
   }
@@ -101,14 +116,6 @@ class AsyncApp extends Component {
       <div className="app">
         <div className="content">
           <Header profilePic={profilePic} name={usersFirstName} />
-          <Nav />
-          {/* <p>
-          {lastUpdated && (
-            <span className="last-updated">
-              Last updated at {moment(lastUpdated).fromNow()}.
-            </span>
-          )}
-        </p> */}
           {isFetching && !leagueData.matches && !error && <LoadingSpinner />}
           {error && <Error message={error} />}
           {!isFetching && !leagueData.matches && <h2>Empty.</h2>}
