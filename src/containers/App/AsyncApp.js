@@ -7,7 +7,8 @@ import {
   fetchMatchesIfNeeded,
   invalidateLeague,
   selectMonth,
-  authStateChange
+  authStateChange,
+  addUserToState
 } from "../../actions/actions";
 import Header from "../../components/Header/Header";
 import Main from "../Main";
@@ -39,19 +40,30 @@ class AsyncApp extends Component {
     const { dispatch, selectedLeague, selectedMonth } = this.props;
     firebase.auth().onAuthStateChanged(user => {
       dispatch(authStateChange(user));
-      if (user) {
-        console.log("writing to database with data" + user.displayName);
-        firebase
-          .database()
-          .ref("users/" + user.uid)
-          .set({
-            uid: user.uid,
-            email: user.email,
-            displayName: user.displayName,
-            photo: user.photoURL,
-            provider: user.providerData[0].providerId
-          });
-      }
+      firebase
+        .database()
+        .ref("users/" + user.uid)
+        .once("value")
+        .then(function(snapshot) {
+          const userExists = snapshot.child("uid").exists();
+          if (user && !userExists) {
+            console.log(
+              "writing to database with data for " + user.displayName
+            );
+            firebase
+              .database()
+              .ref("users/" + user.uid)
+              .set({
+                uid: user.uid,
+                email: user.email,
+                displayName: user.displayName,
+                photo: user.photoURL,
+                provider: user.providerData[0].providerId
+              });
+          }
+          console.log(snapshot.val());
+          dispatch(addUserToState(snapshot.val()));
+        });
     });
     dispatch(fetchMatchesIfNeeded(selectedLeague, selectedMonth));
   }

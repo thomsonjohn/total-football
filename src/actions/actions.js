@@ -16,6 +16,14 @@ export const INVALIDATE_LEAGUE = "INVALIDATE_LEAGUE";
 export const UPDATE_MATCHES_TO_SHOW = "UPDATE_MATCHES_TO_SHOW";
 export const FETCH_FAILURE = "FETCH_FAILURE";
 export const AUTH_STATE_CHANGE = "AUTH_STATE_CHANGE";
+export const ADD_USER_TO_STATE = "ADD_USER_TO_STATE";
+
+export function addUserToState(user) {
+  return {
+    type: ADD_USER_TO_STATE,
+    user
+  };
+}
 
 export function authStateChange(user) {
   return {

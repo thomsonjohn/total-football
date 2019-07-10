@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 
+import { connect } from "react-redux";
+
 import moment from "moment";
 import firebase from "firebase";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
@@ -23,10 +25,14 @@ class Profile extends Component {
   };
 
   render() {
-    const { isSignedIn } = this.props;
+    const { isSignedIn, userStuff } = this.props;
     const currentUser = firebase.auth().currentUser;
 
     let photoUrl;
+    let clubBadge = defaultTeamBadge;
+    let clubName = "No club yet";
+    let nationBadge = defaultTeamBadge;
+    let nationName = "No nation yet";
 
     if (isSignedIn) {
       if (currentUser.providerData[0].providerId === "facebook.com") {
@@ -36,6 +42,24 @@ class Profile extends Component {
       } else {
         photoUrl = currentUser.photoURL;
       }
+    }
+
+    if (Object.keys(userStuff).length > 0) {
+      console.log(userStuff);
+      clubBadge = userStuff.club.badge;
+      clubName = userStuff.club.name;
+      nationBadge = userStuff.nation.badge;
+      nationName = userStuff.nation.name;
+
+      Object.keys(userStuff.friends).map(friend => {
+        firebase
+          .database()
+          .ref(`leagues/${userStuff.league}/players/` + friend)
+          .once("value")
+          .then(function(snapshot) {
+            console.log(snapshot.val());
+          });
+      });
     }
 
     return (
@@ -54,12 +78,12 @@ class Profile extends Component {
               <h3>Teams</h3>
               <div className="profile-teams__grid">
                 <div className="profile-teams__cell">
-                  <img src={defaultTeamBadge} alt="team badge" />
-                  <p>No nation yet</p>
+                  <img src={nationBadge} alt="team badge" />
+                  <p>{nationName}</p>
                 </div>
                 <div className="profile-teams__cell">
-                  <img src={defaultTeamBadge} alt="team badge" />
-                  <p>No club yet</p>
+                  <img src={clubBadge} alt="team badge" />
+                  <p>{clubName}</p>
                 </div>
               </div>
             </div>
@@ -116,4 +140,12 @@ class Profile extends Component {
   }
 }
 
-export default Profile;
+function mapStateToProps(state) {
+  const { userStuff } = state;
+
+  return {
+    userStuff
+  };
+}
+
+export default connect(mapStateToProps)(Profile);
